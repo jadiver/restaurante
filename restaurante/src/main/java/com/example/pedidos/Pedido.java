@@ -72,4 +72,5 @@ public class Pedido {
     public List<DetallePedido> getListaArticulos() {
         return listaArticulos;
     }
+    
 }

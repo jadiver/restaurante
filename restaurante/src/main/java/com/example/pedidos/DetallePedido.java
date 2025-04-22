@@ -60,4 +60,5 @@ public class DetallePedido {
     public int getId() {
         return id;
     }
+    
 }

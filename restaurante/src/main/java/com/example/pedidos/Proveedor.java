@@ -20,4 +20,11 @@ public class Proveedor {
     public int getId() {
         return id;
     }
+    // Método main para prueba
+    public static void main(String[] args) {
+        Proveedor proveedor = new Proveedor(1, "Distribuciones García");
+
+        System.out.println("ID del proveedor: " + proveedor.getId());
+        System.out.println("Nombre del proveedor: " + proveedor.getNombre());
+    }
 }
