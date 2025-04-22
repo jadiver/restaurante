@@ -15,7 +15,7 @@ public class BaseDeDatos {
     private static Connection conexion = null;
     private String host = "127.0.0.1";
     String port = "5432";
-    String dbName = ""; // Poner la base de datos que toca
+    String dbName = "restaurante"; // Poner la base de datos que toca
 
     public BaseDeDatos(String usuario, String contrasenya) {
         String url = "jdbc:postgresql://" +
