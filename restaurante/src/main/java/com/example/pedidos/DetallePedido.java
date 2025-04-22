@@ -1,5 +1,7 @@
 package com.example.pedidos;
 
+import com.example.almacen.Almacen;
+
 import java.time.LocalDate;
 
 public class DetallePedido {
@@ -59,6 +61,23 @@ public class DetallePedido {
 
     public int getId() {
         return id;
+    }
+
+    // === Método main para prueba ===
+    public static void main(String[] args) {
+        Almacen almacen = new Almacen(10, "Almacén Principal");
+        Articulo articulo = new Articulo("0001234567890", "Teclado mecánico", 3.0, almacen);
+
+        DetallePedido detalle = new DetallePedido(501, articulo, 5, 45.99);
+        detalle.setCantidadRecibida(2);
+
+        System.out.println("ID Detalle: " + detalle.getId());
+        System.out.println("Artículo: " + detalle.getArticulo().getNombre());
+        System.out.println("Cantidad Pedida: " + detalle.getCantidadPedida());
+        System.out.println("Cantidad Recibida: " + detalle.getCantidadRecibida());
+        System.out.println("Estado: " + detalle.getEstado());
+        System.out.println("Precio: $" + detalle.getPrecio());
+        System.out.println("Almacén: " + detalle.getArticulo().getAlmacen().getNombre());
     }
     
 }
