@@ -13,25 +13,31 @@ import java.util.Map;
 
 public class BaseDeDatos {
     private static Connection conexion = null;
-    private String host = "127.0.0.1";
-    String port = "5432";
-    String dbName = "restaurante"; // Poner la base de datos que toca
 
-    public BaseDeDatos(String usuario, String contrasenya) {
+    static public boolean conecta() {
+        String dbName = "restaurante";
+        String host = "127.0.0.1";
+        String port = "5432";
+        String usuario = "postgres";
+        String contrasenya = "lolirosa123";
+        boolean correcto = true;
         String url = "jdbc:postgresql://" +
                 host + ":" + port + "/" + dbName +
                 "?user=" + usuario +
+
                 "&password=" + contrasenya;
         try {
             conexion = DriverManager.getConnection(url, usuario, contrasenya);
             System.out.println("Conexión exitosa!");
         } catch (SQLException e) {
             System.err.println("Error de conexión: " + e.getMessage());
+            correcto = false;
         }
+        return correcto;
     }
 
     // 1. Crear base de datos
-    public void crearBaseDatos(String nombreBD) {
+    public static void crearBaseDatos(String nombreBD) {
         String sql = "CREATE DATABASE " + nombreBD;
         try (Statement stmt = conexion.createStatement()) {
             conexion.setAutoCommit(true); // Requerido para CREATE DATABASE
@@ -43,9 +49,10 @@ public class BaseDeDatos {
     }
 
     // 2. Listar bases de datos
-    public List<String> listarBasesDatos() {
+    public static List<String> listarBasesDatos() {
         List<String> basesDatos = new ArrayList<>();
         try (Statement stmt = conexion.createStatement();
+
                 ResultSet rs = stmt.executeQuery("SELECT datname FROM pg_database")) {
             while (rs.next()) {
                 basesDatos.add(rs.getString("datname"));
@@ -57,14 +64,13 @@ public class BaseDeDatos {
     }
 
     // 3. Crear tabla
-    public void crearTabla(String nombreTabla, String... columnas) {
+    public static void crearTabla(String nombreTabla, String... columnas) {
         StringBuilder sql = new StringBuilder("CREATE TABLE " + nombreTabla + " (");
         for (int i = 0; i < columnas.length; i++) {
             sql.append(columnas[i]);
             if (i < columnas.length - 1)
                 sql.append(", ");
         }
-
         sql.append(")");
         try (Statement stmt = conexion.createStatement()) {
             stmt.execute(sql.toString());
@@ -75,7 +81,7 @@ public class BaseDeDatos {
     }
 
     // 4. Listar tablas
-    public List<String> listarTablas(String esquema) {
+    public static List<String> listarTablas(String esquema) {
         List<String> tablas = new ArrayList<>();
         String sql = "SELECT table_name FROM information_schema.tables " +
                 "WHERE table_schema = '" + esquema + "'";
@@ -96,18 +102,18 @@ public class BaseDeDatos {
      * @param sql Consulta SQL completa y formada
      * @return Número de filas afectadas
      */
-    public int ejecutar(String sql) {
-
-        System.out.println(sql);
+    public static int ejecutar(String sql) {
+        // System.out.println(sql);
         try (Statement stmt = conexion.createStatement()) {
             return stmt.executeUpdate(sql);
         } catch (SQLException e) {
+
             System.err.println("Error en operación: " + e.getMessage());
             return -1;
         }
     }
 
-    public List<Map<String, Object>> consultar(String sql) {
+    public static List<Map<String, Object>> consultar(String sql) {
         List<Map<String, Object>> resultados = new ArrayList<>();
         try (Statement stmt = conexion.createStatement();
                 ResultSet rs = stmt.executeQuery(sql)) {
@@ -125,9 +131,19 @@ public class BaseDeDatos {
         return resultados;
     }
 
-    // Cerrar conexión
-    public void cerrarConexion() {
+    public static long numeroDeRegistros(String tabla) {
 
+        List<Map<String, Object>> resultados = new ArrayList<>();
+        Long numFilas;
+        String sql = "SELECT COUNT(*) AS n FROM " + tabla;
+        resultados = consultar(sql);
+        Map<String, Object> fila = resultados.get(0);
+        numFilas = (Long) fila.get("n");
+        return numFilas.longValue();
+    }
+
+    // Cerrar conexión
+    public static void cerrarConexion() {
         try {
             if (conexion != null && !conexion.isClosed()) {
                 conexion.close();
