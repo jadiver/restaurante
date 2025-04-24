@@ -25,17 +25,17 @@ public class Proveedor {
         this.id = id;
         this.nombre = nombre;
     }
-
+        // Guardar proveedor
     public boolean guarda() {
         String sql = "INSERT INTO Proveedores VALUES (" + id + ",'" + nombre + "')";
         return BaseDeDatos.ejecutar(sql) >= 0;
     }
-
+        // Borrar proveedor
     public boolean borra() {
         String sql = "DELETE FROM Proveedores WHERE ID= " + id;
         return BaseDeDatos.ejecutar(sql) >= 0;
     }
-
+        // Consultar proveedor
     public static Proveedor carga(int id) {
         String sql = "SELECT nombre FROM Proveedores WHERE ID= " + id;
         List<Map<String, Object>> resultado = BaseDeDatos.consultar(sql);
@@ -45,7 +45,7 @@ public class Proveedor {
         Proveedor nuevoProveedor = new Proveedor(id, (String) resultado.get(0).get("nombre"));
         return nuevoProveedor;
     }
-
+        //Esto es para que salga la información en un formato bonito
     @Override
     public String toString() {
         return ("ID....: " + id + "\n"

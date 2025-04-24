@@ -6,6 +6,7 @@ import java.time.LocalTime;
 import com.example.pedidos.Articulo;
 import com.example.pedidos.Pedido;
 import com.example.pedidos.Proveedor;
+import com.example.utilidades.EAN;;
 
 public class Entrada {
 
@@ -93,9 +94,8 @@ public class Entrada {
     // Método main para prueba
     public static void main(String[] args) {
         // Creamos un almacén y un artículo de prueba
-        Almacen almacen = new Almacen(1, "Almacén Central");
-        Articulo articulo = new Articulo("1234567890123", "Botella de agua", 20.0, almacen);
-        Pedido pedido = new Pedido(1, new Proveedor(1, "Proveedor A"), 10);  // Usando la clase Proveedor de prueba
+        Articulo articulo = new Articulo(new EAN("0001234567890"), "Botella de agua");
+        Pedido pedido = new Pedido(1, new Proveedor(1, "Proveedor A"));  // Usando la clase Proveedor de prueba
 
         // Creamos una entrada de prueba
         Entrada entrada = new Entrada(1, articulo, pedido, 100.0, LocalDate.now().plusDays(30), 12345, "Lote001");

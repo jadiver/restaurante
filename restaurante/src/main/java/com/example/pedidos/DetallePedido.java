@@ -1,6 +1,6 @@
 package com.example.pedidos;
 
-import com.example.almacen.Almacen;
+import com.example.utilidades.EAN;
 
 import java.time.LocalDate;
 
@@ -10,36 +10,36 @@ public class DetallePedido {
         PENDIENTE, SERVIDO, CANCELADO
     }
 
-    private int id;
-    private Articulo articulo;
-    private int cantidadPedida;
-    private int cantidadRecibida;
-    private Estado estado;
-    private double precio;
-    private LocalDate fechaCancelacion;
+    Pedido pedido;
+    Articulo articulo;
+    double cantidadPedida;
+    double cantidadRecibida;
+    Estado estado;
+    double precio;
+    LocalDate fechaCancelacion;
 
-    //Métodos
-        //Constructor
-    public DetallePedido(int id, Articulo articulo, int cantidadPedida, double precio) {
-        this.id = id;
+    // Métodos
+    // Constructor
+    public DetallePedido(Pedido pedido, Articulo articulo, double cantidadPedida, double precio) {
+        this.pedido = pedido;
         this.articulo = articulo;
         this.cantidadPedida = cantidadPedida;
         this.cantidadRecibida = 0;
         this.precio = precio;
-        this.estado = Estado.PENDIENTE;
+        this.estado = Estado.SERVIDO;
         this.fechaCancelacion = null;
     }
 
-    //Getters y Setters
+    // Getters y Setters
     public void setCantidadRecibida(int cantidad) {
         this.cantidadRecibida = cantidad;
     }
 
-    public int getCantidadRecibida() {
+    public double getCantidadRecibida() {
         return cantidadRecibida;
     }
 
-    public int getCantidadPedida() {
+    public double getCantidadPedida() {
         return cantidadPedida;
     }
 
@@ -59,25 +59,37 @@ public class DetallePedido {
         return fechaCancelacion;
     }
 
-    public int getId() {
-        return id;
+    public Pedido getPedido() {
+        return pedido;
+    }
+
+    @Override
+    public String toString() {
+        return "Pedido: " + pedido
+                + "Articulo: " + articulo
+                + "Cantidad Pedida: " + cantidadPedida
+                + "Cantidad Servida: " + cantidadRecibida
+                + "Estado: " + estado
+                + "Precio: " + precio
+                + "Fecha Cancelacion: " + fechaCancelacion;
     }
 
     // === Método main para prueba ===
     public static void main(String[] args) {
-        Almacen almacen = new Almacen(10, "Almacén Principal");
-        Articulo articulo = new Articulo("0001234567890", "Teclado mecánico", 3.0, almacen);
+        Articulo articulo = new Articulo(new EAN("0001234567890"), "Teclado mecánico");
 
-        DetallePedido detalle = new DetallePedido(501, articulo, 5, 45.99);
+        Proveedor proveedor = new Proveedor(1, "chiquito");
+        Pedido pedido = new Pedido(1, proveedor);
+
+        DetallePedido detalle = new DetallePedido(pedido, articulo, 5, 45.99);
         detalle.setCantidadRecibida(2);
 
-        System.out.println("ID Detalle: " + detalle.getId());
+        System.out.println("ID Detalle: " + detalle.getPedido());
         System.out.println("Artículo: " + detalle.getArticulo().getNombre());
         System.out.println("Cantidad Pedida: " + detalle.getCantidadPedida());
         System.out.println("Cantidad Recibida: " + detalle.getCantidadRecibida());
         System.out.println("Estado: " + detalle.getEstado());
         System.out.println("Precio: $" + detalle.getPrecio());
-        System.out.println("Almacén: " + detalle.getArticulo().getAlmacen().getNombre());
     }
-    
+
 }
