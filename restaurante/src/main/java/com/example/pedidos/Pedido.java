@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.example.almacen.Almacen;
 import com.example.utilidades.BaseDeDatos;
 import com.example.utilidades.EAN;
 
@@ -19,7 +20,7 @@ public class Pedido {
     List<DetallePedido> lista;
 
     // Métodos
-    // Constructor
+        // Constructor
     public Pedido(int id, Proveedor proveedor) {
         this.id = id;
         pendiente = true;
@@ -28,11 +29,11 @@ public class Pedido {
         diasReclamacion = 15;
         lista = new ArrayList<>();
     }
-
+        // Añade linea (articulo)
     public void addLinea(DetallePedido linea) {
         lista.add(linea);
     }
-
+        // Borra linea (articulo)
     public void borraLinea(Articulo articulo) {
         Iterator<DetallePedido> iterator = lista.iterator();
         while (iterator.hasNext()) {
@@ -45,10 +46,10 @@ public class Pedido {
             }
         }
     }
-
+        // Guarda pedido
     public boolean guarda() {
         boolean ok = true;
-        // Primero guardar cabecera
+            // Primero guardar cabecera
         String strPendiente = "true";
         if (!pendiente) {
             strPendiente = "false";
@@ -63,7 +64,7 @@ public class Pedido {
                 + diasReclamacion
                 + ")";
         ok = ok && (BaseDeDatos.ejecutar(sql) >= 0);
-        // Luego guardar detalle
+            // Luego guardar detalle
         for (DetallePedido linea : lista) {
             String fechaCancelacion = "null";
             if (linea.fechaCancelacion != null) {
@@ -83,12 +84,12 @@ public class Pedido {
         }
         return ok;
     }
-
+        // Borra pedido
     public boolean borra() {
         String sql = "DELETE FROM Pedidos WHERE id= " + id;
         return BaseDeDatos.ejecutar(sql) >= 0;
     }
-
+        // Carga pedido
     public static Pedido carga(int id) {
         String sql = "SELECT pendiente,proveedor,fecha,dias_reclamacion FROM Pedidos WHERE id= " + id;
         List<Map<String, Object>> resultado = BaseDeDatos.consultar(sql);
@@ -123,12 +124,13 @@ public class Pedido {
         Pedido miPedido = new Pedido(1, p);
         System.out.println(miPedido.toString());
         EAN ean1 = new EAN("1234567890123");
-        Articulo articulo1 = new Articulo(ean1, "Articulo1");
+        Almacen almacen = new Almacen(0, "general");
+        Articulo articulo1 = new Articulo(ean1, "Articulo1", 200, almacen);
         double precio = 12.0;
         DetallePedido d1 = new DetallePedido(miPedido, articulo1, 1000, precio);
         miPedido.addLinea(d1);
         EAN ean2 = new EAN("1234567890123");
-        Articulo articulo2 = new Articulo(ean2, "Articulo2");
+        Articulo articulo2 = new Articulo(ean2, "Articulo2", 100, almacen);
 
         double precio2 = 22.0;
         DetallePedido d2 = new DetallePedido(miPedido, articulo2, 1500, precio2);

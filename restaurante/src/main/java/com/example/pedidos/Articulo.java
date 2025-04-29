@@ -11,7 +11,7 @@ public class Articulo {
     // Propiedades
     EAN id; // char(13)
     String nombre;
-    Double cantidadMinima;
+    double cantidadMinima;
     Almacen almacen;
 
     // Getters y Setters
@@ -33,9 +33,11 @@ public class Articulo {
 
     // Métodos
         // Constructor
-    public Articulo(EAN id, String nombre) {
+    public Articulo(EAN id, String nombre, double cantidadMinima, Almacen almacen) {
         this.id = id;
         this.nombre = nombre;
+        this.cantidadMinima = cantidadMinima;
+        this.almacen = almacen;
     }
 
         //Guardar articulo
@@ -52,12 +54,18 @@ public class Articulo {
 
         //Consultar articulo
     public static Articulo carga(EAN id) {
-        String sql = "SELECT nombre FROM Articulos WHERE ean= '" + id.getValor() + "'";
+        String sql = "SELECT nombre, cantidad_minima, almacen FROM Articulos WHERE ean= '" + id.getValor() + "'";
         List<Map<String, Object>> resultado = BaseDeDatos.consultar(sql);
         if (resultado.isEmpty()) {
             return null;
         }
-        Articulo nuevoArticulo = new Articulo(id, (String) resultado.get(0).get("nombre"));
+        Almacen almacenesPepe = Almacen.carga((int)resultado.get(0).get("almacen"));
+        Articulo nuevoArticulo = new Articulo(
+            id, 
+            (String)resultado.get(0).get("nombre"),
+            (double)resultado.get(0).get("cantidad_minima"),
+            almacenesPepe
+            );
         return nuevoArticulo;
     }
 
@@ -69,7 +77,8 @@ public class Articulo {
 
     public static void main(String[] args) {
         BaseDeDatos.conecta();
-        Articulo primerArticulo = new Articulo(new EAN("1234567890123"), "Nombre");
+        Almacen almacen = new Almacen(0, "general");
+        Articulo primerArticulo = new Articulo(new EAN("1234567890123"), "Nombre", 200, almacen);
         primerArticulo.guarda();
         Articulo recuperaArticulo = Articulo.carga(new EAN("1234567890123"));
         System.out.println(recuperaArticulo);

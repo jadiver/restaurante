@@ -1,5 +1,6 @@
 package com.example.pedidos;
 
+import com.example.almacen.Almacen;
 import com.example.utilidades.EAN;
 
 import java.time.LocalDate;
@@ -76,7 +77,8 @@ public class DetallePedido {
 
     // === Método main para prueba ===
     public static void main(String[] args) {
-        Articulo articulo = new Articulo(new EAN("0001234567890"), "Teclado mecánico");
+        Almacen almacen = new Almacen(0, "general");
+        Articulo articulo = new Articulo(new EAN("0001234567890"), "Teclado mecánico", 200, almacen);
 
         Proveedor proveedor = new Proveedor(1, "chiquito");
         Pedido pedido = new Pedido(1, proveedor);

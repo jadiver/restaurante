@@ -11,15 +11,15 @@ import com.example.utilidades.EAN;;
 public class Entrada {
 
     // Propiedades
-    private int id;
-    private Articulo articulo;
-    private Pedido pedido;
-    private LocalTime momento;
-    private double cantidad;
-    private double stock;
-    private LocalDate caducidad;
-    private int albaran;
-    private String lote;
+    int id;
+    Articulo articulo;
+    Pedido pedido;
+    LocalTime momento;
+    double cantidad;
+    double stock;
+    LocalDate caducidad;
+    int albaran;
+    String lote;
 
     //Métodos
         //Constructor
@@ -94,7 +94,8 @@ public class Entrada {
     // Método main para prueba
     public static void main(String[] args) {
         // Creamos un almacén y un artículo de prueba
-        Articulo articulo = new Articulo(new EAN("0001234567890"), "Botella de agua");
+        Almacen almacen = new Almacen(0, "general");
+        Articulo articulo = new Articulo(new EAN("0001234567890"), "Botella de agua", 50, almacen);
         Pedido pedido = new Pedido(1, new Proveedor(1, "Proveedor A"));  // Usando la clase Proveedor de prueba
 
         // Creamos una entrada de prueba
